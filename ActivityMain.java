@@ -1,31 +1,29 @@
 package com.iteso.is705419.sesion10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.LayoutInflaterCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+
+import com.iteso.is705419.sesion10.beans.ItemProduct;
 
 public class ActivityMain extends AppCompatActivity {
 
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
+    static final int INTENT_PRODUCTS_NOTIFY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +95,27 @@ public class ActivityMain extends AppCompatActivity {
                 Intent intent = new Intent(this, ActivityPrivacyPolicy.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_products:
+                Intent products = new Intent(this, ActivityProduct.class);
+                startActivityForResult(products, INTENT_PRODUCTS_NOTIFY);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case INTENT_PRODUCTS_NOTIFY:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        ItemProduct itemProduct = data.getParcelableExtra("ITEM");
+                        if (itemProduct.getCategory().getName().equalsIgnoreCase("TECHNOLOGY")) {
+                            FragmentTechnology.notifyDataSetChanged(itemProduct);
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     public void clearPreferences(){

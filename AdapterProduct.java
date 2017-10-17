@@ -1,12 +1,8 @@
 package com.iteso.is705419.sesion10;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,9 +63,7 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.mProductTitle.setText(mDataSet.get(position).getTitle());
-        holder.mProductStore.setText(mDataSet.get(position).getStore());
         holder.mProductLocation.setText(mDataSet.get(position).getLocation());
-        holder.mProductPhone.setText(mDataSet.get(position).getPhone());
         switch (mDataSet.get(position).getImage()) {
             case 0:
                 holder.mProductImage.setImageResource(R.drawable.mac);
@@ -80,14 +74,7 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
 
         }
 
-        holder.mProductPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL,
-                        Uri.parse("tel:" + mDataSet.get(position).getPhone()));
-                context.startActivity(intent);
-            }
-        });
+
 
         Bitmap bitmap = ((BitmapDrawable) holder.mProductThumbnail.getDrawable()).getBitmap();
 

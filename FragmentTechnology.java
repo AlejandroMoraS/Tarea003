@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.iteso.is705419.sesion10.beans.ItemProduct;
+import com.iteso.is705419.sesion10.database.ItemProductControl;
 
 import java.util.ArrayList;
-
-import static android.R.attr.y;
 
 
 /**
@@ -21,21 +20,37 @@ import static android.R.attr.y;
  */
 public class FragmentTechnology extends Fragment {
 
-    private RecyclerView.Adapter mAdapter;
+    private static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public FragmentTechnology() {}
+    static ArrayList<ItemProduct> myDataSet;
+
+    public FragmentTechnology() {
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_technology, container, false);
-        RecyclerView recyclerView = (RecyclerView)
-                view.findViewById(R.id.fragment_technology_recycler_view);
-        // Use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_technology_recycler_view);
         recyclerView.setHasFixedSize(true);
-        // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
+        ItemProductControl itemProductControl = new ItemProductControl();
+//        myDataSet = itemProductControl.getProductsWhere(
+//                null, DataBaseHandler.KEY_PRODUCT_ID + " ASC",
+//                DataBaseHandler.getInstance(getActivity()));
+        mAdapter = new AdapterProduct(getActivity(), myDataSet);
+        recyclerView.setAdapter(mAdapter);
+
+        return view;
+    }
+
+    public static void notifyDataSetChanged(ItemProduct itemProduct){
+        myDataSet.add(itemProduct);
+        mAdapter.notifyDataSetChanged();
+    }
+
+         /*
         ArrayList<ItemProduct> myDataSet = new ArrayList<ItemProduct>();
         ItemProduct itemProduct = new ItemProduct();
         itemProduct.setTitle("MacBook Pro 17\"");
@@ -60,10 +75,6 @@ public class FragmentTechnology extends Fragment {
         myDataSet.add(itemProduct2);
 
         mAdapter = new AdapterProduct(getActivity(), myDataSet);
-        recyclerView.setAdapter(mAdapter);
-        return view;
-
+        */
 
     }
-
-}
